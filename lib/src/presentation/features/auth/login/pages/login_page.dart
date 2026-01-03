@@ -1,5 +1,8 @@
+import 'package:do_commerce/src/presentation/core/widgets/loading_indicator.dart';
+import 'package:do_commerce/src/presentation/features/auth/login/widgets/password_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../riverpod/login_provider.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -10,8 +13,49 @@ class LoginPage extends ConsumerStatefulWidget {
 
 class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+
+  final ValueNotifier<bool> obsecureText = ValueNotifier<bool>(true);
+
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    ref.listenManual(loginProvider, (previous, next) {
+      if (next is AsyncError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(next.error.toString()),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  void onTap() {
+    if (_formKey.currentState!.validate()) {
+      ref
+          .read(loginProvider.notifier)
+          .login(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim(),
+          );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(loginProvider);
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -34,29 +78,23 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 child: Column(
                   children: [
                     TextFormField(
+                      controller: emailController,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: 'Email',
                       ),
                     ),
                     const SizedBox(height: 16),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Password',
-                      ),
-                    ),
+                    PasswordField(controller: passwordController),
                   ],
                 ),
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    //call api
-                  }
-                },
-                child: const Text('Login'),
+                onPressed: onTap,
+                child: state.isLoading
+                    ? const LoadingIndicator()
+                    : const Text('Login'),
               ),
             ],
           ),

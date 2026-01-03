@@ -4,8 +4,8 @@ import 'colors.dart';
 
 class AppBarThemeClass {
   static final appLightTheme = AppBarTheme(
-    backgroundColor: Colors.transparent,
-    surfaceTintColor: Colors.transparent,
+    backgroundColor: AppLightColors.primary,
+    surfaceTintColor: AppLightColors.primary,
     elevation: 0,
     centerTitle: true,
     iconTheme: const IconThemeData(color: AppLightColors.textColor),
@@ -18,8 +18,8 @@ class AppBarThemeClass {
   );
 
   static final appDarkTheme = AppBarTheme(
-    backgroundColor: Colors.transparent,
-    surfaceTintColor: Colors.transparent,
+    backgroundColor: AppDarkColors.primary,
+    surfaceTintColor: AppDarkColors.primary,
     elevation: 0,
     centerTitle: true,
     iconTheme: const IconThemeData(color: AppDarkColors.textColor),
