@@ -1,5 +1,6 @@
 import 'package:do_commerce/src/presentation/core/widgets/loading_indicator.dart';
 import 'package:do_commerce/src/presentation/features/auth/login/widgets/password_field.dart';
+import 'package:do_commerce/src/presentation/features/home/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../riverpod/login_provider.dart';
@@ -16,8 +17,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   final ValueNotifier<bool> obsecureText = ValueNotifier<bool>(true);
 
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final userName = TextEditingController(text: 'sophiab');
+  final passwordController = TextEditingController(text: 'sophiabpass');
 
   @override
   void initState() {
@@ -30,13 +31,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
+      } else if (next is AsyncData) {
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (context) => const HomePage()));
       }
     });
   }
 
   @override
   void dispose() {
-    emailController.dispose();
+    userName.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -46,7 +51,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       ref
           .read(loginProvider.notifier)
           .login(
-            email: emailController.text.trim(),
+            userName: userName.text.trim(),
             password: passwordController.text.trim(),
           );
     }
@@ -70,7 +75,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               const SizedBox(height: 16),
               Text(
                 'Login to your account',
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 66),
               Form(
@@ -78,10 +83,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 child: Column(
                   children: [
                     TextFormField(
-                      controller: emailController,
+                      controller: userName,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: 'Email',
+                        hintText: 'User Name',
                       ),
                     ),
                     const SizedBox(height: 16),

@@ -1,6 +1,6 @@
 class ApiEndPoints {
-  static const String baseUrl = "https://api.escuelajs.co/api/v1/";
-  static const String login = "auth/login";
-  static const String profile = "auth/profile";
-  static const String users = "users";
+  static const String baseUrl = "https://dummyjson.com";
+  static const String login = "/auth/login";
+  static const String profile = "/auth/me";
+  static const String products = "/products";
 }

@@ -1,3 +1,6 @@
+import 'package:do_commerce/src/data/repository/product_list_repository_impl.dart';
+import 'package:do_commerce/src/domain/repository/product_list_repository.dart';
+import 'package:do_commerce/src/domain/use_case/product_list_use_case.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -15,10 +18,22 @@ LoginUseCase loginUseCase(Ref ref) {
   return LoginUseCase(authRepository: ref.read(authRepositoryProvider));
 }
 
-//repository
 @riverpod
+ProductListUseCase productListUseCase(Ref ref) {
+  return ProductListUseCase(
+    productListRepository: ref.read(productListRepositoryProvider),
+  );
+}
+
+//repository
+@Riverpod(keepAlive: true)
 AuthRepository authRepository(Ref ref) {
   return AuthRepositoryImpl(restClient: ref.read(restClientProvider));
+}
+
+@Riverpod(keepAlive: true)
+ProductListRepository productListRepository(Ref ref) {
+  return ProductListRepositoryImpl(restClient: ref.read(restClientProvider));
 }
 
 //data source

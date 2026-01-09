@@ -12,12 +12,15 @@ class Login extends _$Login {
     return null;
   }
 
-  Future<void> login({required String email, required String password}) async {
+  Future<void> login({
+    required String userName,
+    required String password,
+  }) async {
     state = const AsyncLoading();
     try {
       final res = await ref
           .read(loginUseCaseProvider)
-          .call(email: email, password: password);
+          .call(userName: userName, password: password);
 
       state = AsyncData(res);
     } catch (e) {

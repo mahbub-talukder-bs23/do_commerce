@@ -17,6 +17,7 @@
 *.g.dart
 *.mapper.dart
 *.gen.dart
+*.lock
 
 # IntelliJ related
 *.iml

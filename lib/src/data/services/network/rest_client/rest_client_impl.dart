@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:do_commerce/src/data/services/local/secure_storage.dart';
 import 'package:do_commerce/src/data/services/network/rest_client/rest_client.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-import '../custom_interceptor.dart';
-
+import '../../../../core/logger/logger.dart';
 import '../api_end_points.dart';
 
 class RestClientImpl implements RestClient {
@@ -19,10 +19,20 @@ class RestClientImpl implements RestClient {
       BaseOptions(
         baseUrl: ApiEndPoints.baseUrl,
         connectTimeout: const Duration(seconds: 5),
-        receiveTimeout: const Duration(seconds: 3),
+        receiveTimeout: const Duration(seconds: 5),
       ),
     );
-    _dio.interceptors.add(LoggingInterceptor());
+    _dio.interceptors.add(
+      PrettyDioLogger(
+        requestHeader: true,
+        requestBody: true,
+        responseBody: true,
+        responseHeader: false,
+        error: true,
+        compact: true,
+        maxWidth: 90,
+      ),
+    );
   }
 
   @override
@@ -42,13 +52,16 @@ class RestClientImpl implements RestClient {
       return response;
     } on DioException catch (e) {
       if (e.response != null) {
+        logger.e(e.response!.data);
         throw Exception(
           'Failed with status code ${e.response!.statusCode}: ${e.response!.statusMessage}',
         );
       } else {
+        logger.e(e.message);
         throw Exception('Failed to connect: ${e.message}');
       }
     } catch (e) {
+      logger.e(e);
       throw Exception('Unexpected error: $e');
     }
   }
@@ -67,6 +80,7 @@ class RestClientImpl implements RestClient {
       );
       return response;
     } on DioException catch (e) {
+      logger.e(e.response?.data);
       throw Exception(e.response?.data['message']);
     }
   }
@@ -85,6 +99,7 @@ class RestClientImpl implements RestClient {
       );
       return response;
     } on DioException catch (e) {
+      logger.e(e.response?.data);
       throw Exception(e.response?.data['message']);
     }
   }
@@ -100,6 +115,7 @@ class RestClientImpl implements RestClient {
       );
       return response;
     } on DioException catch (e) {
+      logger.e(e.response?.data);
       throw Exception(e.response?.data['message']);
     }
   }
@@ -118,6 +134,7 @@ class RestClientImpl implements RestClient {
       );
       return response;
     } on DioException catch (e) {
+      logger.e(e.response?.data);
       throw Exception(e.response?.data['message']);
     }
   }

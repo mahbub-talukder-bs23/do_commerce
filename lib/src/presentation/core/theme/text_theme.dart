@@ -16,6 +16,21 @@ class AppTextTheme {
       fontSize: 12,
       fontWeight: FontWeight.w400,
     ),
+    titleLarge: TextStyle(
+      fontFamily: _fontFamily,
+      fontSize: 20,
+      fontWeight: FontWeight.w800,
+    ),
+    titleMedium: TextStyle(
+      fontFamily: _fontFamily,
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+    ),
+    titleSmall: TextStyle(
+      fontFamily: _fontFamily,
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+    ),
     bodyLarge: TextStyle(
       fontFamily: _fontFamily,
       fontSize: 16,
@@ -43,6 +58,21 @@ class AppTextTheme {
       fontFamily: _fontFamily,
       fontSize: 12,
       fontWeight: FontWeight.w400,
+    ),
+    titleLarge: TextStyle(
+      fontFamily: _fontFamily,
+      fontSize: 20,
+      fontWeight: FontWeight.w800,
+    ),
+    titleMedium: TextStyle(
+      fontFamily: _fontFamily,
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+    ),
+    titleSmall: TextStyle(
+      fontFamily: _fontFamily,
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
     ),
     bodyLarge: TextStyle(
       fontFamily: _fontFamily,

@@ -10,6 +10,7 @@ class AppLightColors {
   static const alert = Color(0xFFCB2F2F);
   static const success = Color.fromARGB(255, 62, 140, 64);
   static const surface = Colors.white;
+  static const onSurface = Color.fromARGB(255, 199, 200, 200);
 }
 
 class AppDarkColors {
@@ -20,4 +21,5 @@ class AppDarkColors {
   static const alert = Color(0xFFCB2F2F);
   static const success = Color.fromARGB(255, 62, 140, 64);
   static const surface = Color.fromARGB(255, 0, 0, 0);
+  static const onSurface = Color.fromARGB(255, 232, 232, 255);
 }

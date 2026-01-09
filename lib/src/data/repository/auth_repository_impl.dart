@@ -1,5 +1,6 @@
-import 'package:do_commerce/src/data/services/local/secure_storage.dart';
-
+import '../../core/constants/constants.dart';
+import '../../core/logger/logger.dart';
+import '../services/local/secure_storage.dart';
 import '../models/login_model.dart';
 import '../services/network/api_end_points.dart';
 import '../../domain/entity/login_entity.dart';
@@ -16,25 +17,27 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final response = await restClient.post(
         ApiEndPoints.login,
-        data: LoginModel(
-          email: loginEntity.email,
+        data: LoginRequestModel(
+          userName: loginEntity.userName,
           password: loginEntity.password,
         ).toJson(),
       );
 
-      await SecureStorage().write(
-        key: 'access_token',
-        value: response.data['access_token'],
-      );
+      final loginResponseModel = LoginResponseModel.fromJson(response.data);
 
-      await SecureStorage().write(
-        key: 'refresh_token',
-        value: response.data['refresh_token'],
-      );
+      // await SecureStorage().write(
+      //   key: StringConstants.accessTokenKey,
+      //   value: loginResponseModel.accessToken,
+      // );
 
-      return response.data;
+      // await SecureStorage().write(
+      //   key: StringConstants.refreshTokenKey,
+      //   value: loginResponseModel.refreshToken,
+      // );
+
+      return 'Login Success';
     } catch (e) {
-      rethrow;
+      throw Exception(e.toString());
     }
   }
 }
