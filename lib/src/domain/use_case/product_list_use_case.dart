@@ -9,6 +9,9 @@ class ProductListUseCase {
 
   Future<List<ProductEntity>> call({required bool reset}) async {
     try {
+      if (reset) {
+        productListRepository.clearProductList();
+      }
       final currentProducts = productListRepository.productList;
       final limit = 10;
       final skip = reset ? 0 : currentProducts.length;

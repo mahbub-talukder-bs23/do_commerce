@@ -25,15 +25,15 @@ class AuthRepositoryImpl implements AuthRepository {
 
       final loginResponseModel = LoginResponseModel.fromJson(response.data);
 
-      // await SecureStorage().write(
-      //   key: StringConstants.accessTokenKey,
-      //   value: loginResponseModel.accessToken,
-      // );
+      await SecureStorage().write(
+        key: StringConstants.accessTokenKey,
+        value: loginResponseModel.accessToken,
+      );
 
-      // await SecureStorage().write(
-      //   key: StringConstants.refreshTokenKey,
-      //   value: loginResponseModel.refreshToken,
-      // );
+      await SecureStorage().write(
+        key: StringConstants.refreshTokenKey,
+        value: loginResponseModel.refreshToken,
+      );
 
       return 'Login Success';
     } catch (e) {
