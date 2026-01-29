@@ -37,7 +37,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
       return 'Login Success';
     } catch (e) {
-      throw Exception(e.toString());
+      throw e.toString();
     }
   }
 }

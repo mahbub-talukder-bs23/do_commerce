@@ -33,7 +33,7 @@ class ProductListRepositoryImpl implements ProductListRepository {
 
       return _productList;
     } catch (e) {
-      throw Exception(e.toString());
+      throw e.toString();
     }
   }
 
