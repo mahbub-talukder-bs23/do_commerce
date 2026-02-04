@@ -4,6 +4,8 @@ import 'package:do_commerce/src/presentation/features/products/riverpod/product_
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+part '../widgets/product_list_builder.dart';
+
 class ProductListPage extends ConsumerStatefulWidget {
   const ProductListPage({super.key});
 
@@ -38,40 +40,21 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(productListProvider);
-    final products = state.value ?? [];
-
-    if (state is AsyncError) {
-      return const Center(child: Text("Something went wrong"));
-    }
 
     return RefreshIndicator(
-      onRefresh: () {
-        isRefreshing = true;
-        return ref
-            .read(productListProvider.notifier)
-            .loadProductList(reset: true);
-      },
-      child: ListView.builder(
-        controller: scrollController,
-        itemCount: products.length + (state.isLoading ? 1 : 0),
-        itemBuilder: (context, index) {
-          if (index == products.length) {
-            return Padding(
-              padding: const EdgeInsets.all(16),
-              child: Center(
-                child: SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-              ),
-            );
-          }
-
-          return ProductCard(product: products[index]);
+      onRefresh: () async => ref.refresh(productListProvider),
+      child: state.when(
+        // skipLoadingOnRefresh: true,
+        skipLoadingOnReload: true,
+        data: (data) => _ProductListBuilder(
+          scrollController: scrollController,
+          products: data,
+          state: state,
+        ),
+        error: (error, stackTrace) {
+          return const Center(child: Text("Something went wrong"));
         },
+        loading: () => const SizedBox.shrink(),
       ),
     );
   }

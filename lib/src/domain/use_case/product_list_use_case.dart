@@ -9,6 +9,7 @@ class ProductListUseCase {
 
   Future<List<ProductEntity>> call({required bool reset}) async {
     try {
+      // await Future.delayed(const Duration(seconds: 2));
       if (reset) {
         productListRepository.clearProductList();
       }

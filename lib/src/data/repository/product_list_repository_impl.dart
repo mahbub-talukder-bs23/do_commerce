@@ -31,14 +31,14 @@ class ProductListRepositoryImpl implements ProductListRepository {
 
       _productList.addAll(newProductList);
 
-      return _productList;
+      return _productList.toList();
     } catch (e) {
       throw Exception(e.toString());
     }
   }
 
   @override
-  List<ProductEntity> get productList => _productList;
+  List<ProductEntity> get productList => _productList.toList();
 
   @override
   void clearProductList() {

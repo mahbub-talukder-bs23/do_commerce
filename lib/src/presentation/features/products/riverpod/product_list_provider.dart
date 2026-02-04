@@ -13,9 +13,15 @@ class ProductList extends _$ProductList {
   }
 
   Future<void> loadProductList({bool reset = false}) async {
-    state = const AsyncValue.loading();
+    state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       return await ref.read(productListUseCaseProvider).call(reset: reset);
     });
   }
+
+  // Future<void> reset() async {
+  //   state = await AsyncValue.guard(() async {
+  //     return await ref.read(productListUseCaseProvider).call(reset: true);
+  //   });
+  // }
 }
