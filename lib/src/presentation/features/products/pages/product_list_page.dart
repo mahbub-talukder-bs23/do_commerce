@@ -32,7 +32,7 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
-        ref.read(productListProvider.notifier).loadProductList();
+        ref.read(productListProvider.notifier).loadMoreProduct();
       }
     });
   }
@@ -42,9 +42,8 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
     final state = ref.watch(productListProvider);
 
     return RefreshIndicator(
-      onRefresh: () async => ref.refresh(productListProvider),
+      onRefresh: () async => ref.refresh(productListProvider.future),
       child: state.when(
-        // skipLoadingOnRefresh: true,
         skipLoadingOnReload: true,
         data: (data) => _ProductListBuilder(
           scrollController: scrollController,
@@ -54,7 +53,11 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
         error: (error, stackTrace) {
           return const Center(child: Text("Something went wrong"));
         },
-        loading: () => const SizedBox.shrink(),
+        loading: () => Center(
+          child: CircularProgressIndicator(
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
       ),
     );
   }

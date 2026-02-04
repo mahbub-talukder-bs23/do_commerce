@@ -1,6 +1,5 @@
 import 'package:do_commerce/src/core/di/di.dart';
 import 'package:do_commerce/src/domain/entity/product_entity.dart';
-import 'package:do_commerce/src/domain/use_case/product_list_use_case.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'product_list_provider.g.dart';
@@ -12,7 +11,9 @@ class ProductList extends _$ProductList {
     return ref.read(productListUseCaseProvider).call(reset: true);
   }
 
-  Future<void> loadProductList({bool reset = false}) async {
+  Future<void> loadMoreProduct({bool reset = false}) async {
+    if (state.isLoading) return;
+
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       return await ref.read(productListUseCaseProvider).call(reset: reset);

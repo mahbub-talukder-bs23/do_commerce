@@ -1,5 +1,18 @@
 import 'package:do_commerce/src/domain/entity/product_entity.dart';
 
+class ProductListModel extends ProductListEntity {
+  ProductListModel({required super.products, required super.cursor});
+
+  factory ProductListModel.fromJson(Map<String, dynamic> json) {
+    return ProductListModel(
+      products: List<ProductModel>.from(
+        json['products'].map((x) => ProductModel.fromJson(x)),
+      ),
+      cursor: json['cursor'],
+    );
+  }
+}
+
 class ProductModel extends ProductEntity {
   ProductModel({
     required super.id,

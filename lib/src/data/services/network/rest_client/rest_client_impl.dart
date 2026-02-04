@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:do_commerce/src/data/services/local/paginated_data_source/paginated_data_source.dart';
 import 'package:do_commerce/src/data/services/local/secure_storage.dart';
 import 'package:do_commerce/src/data/services/network/rest_client/rest_client.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -137,5 +138,36 @@ class RestClientImpl implements RestClient {
       logger.e(e.response?.data);
       throw Exception(e.response?.data['message']);
     }
+  }
+
+  @override
+  Future<Response> getPaginatedData({
+    required PaginationType type,
+    int limit = 10,
+    int page = 1,
+    String? cursor,
+    int skip = 0,
+  }) async {
+    final data = await switch (type) {
+      PaginationType.page => PaginatedDataSource.getDataOnPageLimit(
+        limit: limit,
+        page: page,
+      ),
+      PaginationType.skip => PaginatedDataSource.getDataOnSkipLimit(
+        limit: limit,
+        skip: skip,
+      ),
+      PaginationType.cursor => PaginatedDataSource.getDataOnCursorLimit(
+        limit: limit,
+        cursor: cursor,
+      ),
+    };
+
+    logger.i(data);
+
+    return Response(
+      data: data,
+      requestOptions: RequestOptions(path: ''),
+    );
   }
 }

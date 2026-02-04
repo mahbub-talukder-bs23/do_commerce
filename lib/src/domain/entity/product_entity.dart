@@ -1,3 +1,12 @@
+class ProductListEntity {
+  final List<ProductEntity> products;
+
+  /// Only for cursor based pagination
+  final String? cursor;
+
+  ProductListEntity({required this.products, this.cursor});
+}
+
 class ProductEntity {
   final int id;
   final String title;
