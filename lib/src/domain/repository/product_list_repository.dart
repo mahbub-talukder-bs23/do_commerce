@@ -9,6 +9,6 @@ abstract class ProductListRepository {
   void clearProductList();
   Future<List<ProductEntity>> getProductList({
     required int limit,
-    required dynamic nextPoint,
+    required bool reset,
   });
 }

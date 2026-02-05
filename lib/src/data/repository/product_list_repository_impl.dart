@@ -9,22 +9,27 @@ import 'package:do_commerce/src/domain/repository/product_list_repository.dart';
 import 'package:logger/logger.dart';
 
 class ProductListRepositoryImpl implements ProductListRepository {
-  ProductListRepositoryImpl({required this.restClient});
+  ProductListRepositoryImpl({
+    required this.restClient,
+    required this.paginationStrategy,
+  });
 
   final RestClient restClient;
+  final PaginationStrategy paginationStrategy;
+
   final _productList = <ProductEntity>[];
   String? _cursor;
 
   @override
   Future<List<ProductEntity>> getProductList({
     required int limit,
-    required dynamic nextPoint,
+    required bool reset,
   }) async {
     try {
       final response = await restClient.getPaginatedData(
-        type: PaginationType.cursor,
+        type: PaginationType.skip,
         limit: limit,
-        cursor: nextPoint as String?,
+        skip: paginationStrategy.calculate(_productList.length, reset),
       );
 
       // final response = await restClient.get(
@@ -64,4 +69,26 @@ class ProductListRepositoryImpl implements ProductListRepository {
 
   @override
   String? get cursor => _cursor;
+}
+
+abstract class PaginationStrategy<TOutput, TInput, TReset> {
+  TOutput calculate(TInput input, TReset reset);
+}
+
+class OffsetStrategy implements PaginationStrategy<int, int, bool> {
+  @override
+  int calculate(int length, bool reset) => reset ? 0 : length;
+}
+
+class PageStrategy implements PaginationStrategy<int, int, bool> {
+  final int limit;
+  PageStrategy(this.limit);
+
+  @override
+  int calculate(int length, bool reset) => reset ? 1 : (length ~/ limit) + 1;
+}
+
+class CursorStrategy implements PaginationStrategy<String?, String?, bool> {
+  @override
+  String? calculate(String? currentCursor, _) => currentCursor;
 }
