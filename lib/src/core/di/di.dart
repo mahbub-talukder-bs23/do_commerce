@@ -33,10 +33,7 @@ AuthRepository authRepository(Ref ref) {
 
 @Riverpod(keepAlive: true)
 ProductListRepository productListRepository(Ref ref) {
-  return ProductListRepositoryImpl(
-    restClient: ref.read(restClientProvider),
-    paginationStrategy: OffsetStrategy(),
-  );
+  return ProductListRepositoryImpl(restClient: ref.read(restClientProvider));
 }
 
 //data source
