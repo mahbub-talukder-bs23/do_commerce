@@ -9,9 +9,9 @@ class ProductListUseCase {
 
   Future<List<ProductEntity>> call({required bool reset}) async {
     try {
-      if (reset) {
-        productListRepository.clearProductList();
-      }
+      // if (reset) {
+      //   productListRepository.clearProductList();
+      // }
       final limit = 10;
 
       // final currentProducts = productListRepository.productList;

@@ -1,5 +1,4 @@
 import '../../core/constants/constants.dart';
-import '../../core/logger/logger.dart';
 import '../services/local/secure_storage.dart';
 import '../models/login_model.dart';
 import '../services/network/api_end_points.dart';
