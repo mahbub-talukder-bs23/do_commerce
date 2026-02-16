@@ -7,20 +7,10 @@ import 'package:do_commerce/src/domain/entity/product_entity.dart';
 import 'package:do_commerce/src/domain/repository/product_list_repository.dart';
 
 class ProductListRepositoryImpl extends ProductListRepository
-    with
-        PaginationMixin<ProductEntity>,
-        PagePaginationStrategyMixin<ProductEntity> {
+    with CursorPaginationStrategyMixin<ProductEntity> {
   ProductListRepositoryImpl({required this.restClient});
 
   final RestClient restClient;
-
-  @override
-  List<ProductEntity> get productList => itemList;
-
-  @override
-  void clearProductList() {
-    clearItemList();
-  }
 
   @override
   Future<List<ProductEntity>> getProductList({
@@ -28,21 +18,18 @@ class ProductListRepositoryImpl extends ProductListRepository
     required bool reset,
   }) async {
     try {
-      if (reset) {
-        clearItemList();
-      }
-
       final response = await restClient.getPaginatedData(
-        type: PaginationType.page,
+        type: PaginationType.cursor,
         limit: limit,
-        page: calculatePage(limit, reset),
+        cursor: calculateCursor(reset),
       );
 
       final result = ProductListModel.fromJson(response.data);
 
-      addItems(result.products);
-
-      return productList;
+      return getPaginatedItems(
+        newItems: result.products,
+        newCursor: result.cursor,
+      );
     } catch (e, stackTrace) {
       logger.e(e, stackTrace: stackTrace);
       throw Exception(e.toString());

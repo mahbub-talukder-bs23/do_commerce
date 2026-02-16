@@ -1,72 +1,48 @@
-mixin PaginationMixin<T> {
+mixin OffsetPaginationStrategyMixin<T> {
   final List<T> _itemList = [];
-  List<T> get itemList => _itemList.toList();
 
-  void clearItemList() => _itemList.clear();
-  void addItems(List<T> items) => _itemList.addAll(items);
-}
-
-mixin OffsetPaginationStrategyMixin<T> on PaginationMixin<T> {
   int calculateOffset(bool reset) {
-    return reset ? 0 : itemList.length;
+    if (reset) _itemList.clear();
+
+    return _itemList.length;
+  }
+
+  List<T> getPaginatedItems({required List<T> newItems}) {
+    return (_itemList..addAll(newItems)).toList();
   }
 }
 
-mixin PagePaginationStrategyMixin<T> on PaginationMixin<T> {
+mixin PagePaginationStrategyMixin<T> {
+  final List<T> _itemList = [];
+
   int calculatePage(int limit, bool reset) {
-    return reset ? 1 : (itemList.length ~/ limit) + 1;
+    if (reset) _itemList.clear();
+
+    return (_itemList.length ~/ limit) + 1;
+  }
+
+  List<T> getPaginatedItems({required List<T> newItems}) {
+    return (_itemList..addAll(newItems)).toList();
   }
 }
 
-mixin CursorPaginationStrategyMixin<T> on PaginationMixin<T> {
+mixin CursorPaginationStrategyMixin<T> {
+  final List<T> _itemList = [];
+
   String? _cursor;
 
-  String? get cursor => _cursor;
+  String? calculateCursor(bool reset) {
+    if (reset) _itemList.clear();
 
-  void clearCursor() => _cursor = null;
-
-  void setCursor(String? cursor) {
-    _cursor = cursor;
+    return reset ? null : _cursor;
   }
 
-  String? calculateCursor(bool reset) => reset ? null : _cursor;
+  List<T> getPaginatedItems({
+    required List<T> newItems,
+    required String? newCursor,
+  }) {
+    _cursor = newCursor;
+
+    return (_itemList..addAll(newItems)).toList();
+  }
 }
-
-// mixin ProductPaginationMixin {
-//   final List<ProductEntity> _productList = [];
-
-//   List<ProductEntity> get productList => _productList.toList();
-
-//   void clearProductList() {
-//     _productList.clear();
-//   }
-
-//   void addProducts(List<ProductEntity> products) {
-//     _productList.addAll(products);
-//   }
-// }
-
-// mixin OffsetPaginationMixin {
-//   int calculateOffset(int length, bool reset) => reset ? 0 : length;
-// }
-
-// mixin PagePaginationMixin {
-//   int calculatePage(int length, int limit, bool reset) =>
-//       reset ? 1 : (length ~/ limit) + 1;
-// }
-
-// mixin CursorPaginationMixin {
-//   String? _cursor;
-
-//   String? get cursor => _cursor;
-
-//   void clearCursor() => _cursor = null;
-
-//   void setCursor(String? cursor) {
-//     _cursor = cursor;
-//   }
-
-//   String? calculateCursor(bool reset) => reset ? null : _cursor;
-// }
-
-// Your base mixin remains the same

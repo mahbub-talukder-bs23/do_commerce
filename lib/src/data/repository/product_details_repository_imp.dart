@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:do_commerce/src/core/logger/logger.dart';
 import 'package:do_commerce/src/data/models/product_details_model.dart';
 import 'package:do_commerce/src/data/services/network/api_end_points.dart';
