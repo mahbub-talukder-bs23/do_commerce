@@ -30,7 +30,7 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
     });
 
     scrollController.addListener(() {
-      if (scrollController.position.pixels ==
+      if (scrollController.position.pixels >=
           scrollController.position.maxScrollExtent) {
         ref.read(productListProvider.notifier).loadMoreProduct();
       }

@@ -1,27 +1,24 @@
-import 'package:do_commerce/src/domain/entity/product_entity.dart';
+mixin PaginationMixin<T> {
+  final List<T> _itemList = [];
+  List<T> get itemList => _itemList.toList();
 
-mixin ProductPaginationMixin {
-  final List<ProductEntity> _productList = [];
-  List<ProductEntity> get productList => _productList.toList();
-
-  void clearProductList() => _productList.clear();
-  void addProducts(List<ProductEntity> products) =>
-      _productList.addAll(products);
+  void clearItemList() => _itemList.clear();
+  void addItems(List<T> items) => _itemList.addAll(items);
 }
 
-mixin OffsetPaginationStrategyMixin on ProductPaginationMixin {
+mixin OffsetPaginationStrategyMixin<T> on PaginationMixin<T> {
   int calculateOffset(bool reset) {
-    return reset ? 0 : productList.length;
+    return reset ? 0 : itemList.length;
   }
 }
 
-mixin PagePaginationStrategyMixin on ProductPaginationMixin {
+mixin PagePaginationStrategyMixin<T> on PaginationMixin<T> {
   int calculatePage(int limit, bool reset) {
-    return reset ? 1 : (productList.length ~/ limit) + 1;
+    return reset ? 1 : (itemList.length ~/ limit) + 1;
   }
 }
 
-mixin CursorPaginationStrategyMixin on ProductPaginationMixin {
+mixin CursorPaginationStrategyMixin<T> on PaginationMixin<T> {
   String? _cursor;
 
   String? get cursor => _cursor;

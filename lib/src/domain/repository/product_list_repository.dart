@@ -1,3 +1,4 @@
+import 'package:do_commerce/src/domain/entity/product_details_entity.dart';
 import 'package:do_commerce/src/domain/entity/product_entity.dart';
 
 abstract class ProductListRepository {
