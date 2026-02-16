@@ -6,6 +6,7 @@ class AppBarThemeClass {
   static final appLightTheme = AppBarTheme(
     backgroundColor: AppLightColors.primary,
     surfaceTintColor: AppLightColors.primary,
+    foregroundColor: AppLightColors.surface,
     elevation: 0,
     centerTitle: true,
     iconTheme: const IconThemeData(color: AppLightColors.textColor),
