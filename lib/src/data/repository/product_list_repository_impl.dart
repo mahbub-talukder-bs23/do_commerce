@@ -6,11 +6,12 @@ import 'package:do_commerce/src/data/services/network/rest_client/rest_client.da
 import 'package:do_commerce/src/domain/entity/product_entity.dart';
 import 'package:do_commerce/src/domain/repository/product_list_repository.dart';
 
-class ProductListRepositoryImpl extends ProductListRepository
-    with CursorPaginationStrategyMixin<ProductEntity> {
+class ProductListRepositoryImpl extends ProductListRepository {
   ProductListRepositoryImpl({required this.restClient});
 
   final RestClient restClient;
+  PaginationStrategy<ProductEntity, String?> paginationStrategy =
+      CursorPaginationStrategy<ProductEntity>();
 
   @override
   Future<List<ProductEntity>> getProductList({
@@ -18,21 +19,20 @@ class ProductListRepositoryImpl extends ProductListRepository
     required bool reset,
   }) async {
     try {
+      final nextParam = paginationStrategy.getNextParameter(limit, reset);
+
       final response = await restClient.getPaginatedData(
         type: PaginationType.cursor,
         limit: limit,
-        cursor: calculateCursor(reset),
+        cursor: nextParam,
       );
 
-      final result = ProductListModel.fromJson(response.data);
+      final model = ProductListModel.fromJson(response.data);
 
-      return getPaginatedItems(
-        newItems: result.products,
-        newCursor: result.cursor,
-      );
+      return paginationStrategy.updateAndGetItems(model.products, model.cursor);
     } catch (e, stackTrace) {
       logger.e(e, stackTrace: stackTrace);
-      throw Exception(e.toString());
+      rethrow;
     }
   }
 }

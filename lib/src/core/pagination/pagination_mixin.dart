@@ -1,48 +1,58 @@
-mixin OffsetPaginationStrategyMixin<T> {
+abstract class PaginationStrategy<T, P> {
+  P getNextParameter(int? limit, bool reset);
+  List<T> updateAndGetItems(List<T> items, String? nextCursor);
+}
+
+class OffsetPaginationStrategy<T> implements PaginationStrategy<T, int> {
   final List<T> _itemList = [];
 
-  int calculateOffset(bool reset) {
+  @override
+  int getNextParameter(int? limit, bool reset) {
     if (reset) _itemList.clear();
-
     return _itemList.length;
   }
 
-  List<T> getPaginatedItems({required List<T> newItems}) {
-    return (_itemList..addAll(newItems)).toList();
+  @override
+  List<T> updateAndGetItems(List<T> items, String? nextCursor) {
+    _itemList.addAll(items);
+    return List.unmodifiable(_itemList);
   }
 }
 
-mixin PagePaginationStrategyMixin<T> {
+class PagePaginationStrategy<T> implements PaginationStrategy<T, int> {
   final List<T> _itemList = [];
 
-  int calculatePage(int limit, bool reset) {
+  @override
+  int getNextParameter(int? limit, bool reset) {
     if (reset) _itemList.clear();
 
-    return (_itemList.length ~/ limit) + 1;
+    return (_itemList.length ~/ limit!) + 1;
   }
 
-  List<T> getPaginatedItems({required List<T> newItems}) {
-    return (_itemList..addAll(newItems)).toList();
+  @override
+  List<T> updateAndGetItems(List<T> items, String? nextCursor) {
+    _itemList.addAll(items);
+    return List.unmodifiable(_itemList);
   }
 }
 
-mixin CursorPaginationStrategyMixin<T> {
+class CursorPaginationStrategy<T> implements PaginationStrategy<T, String?> {
   final List<T> _itemList = [];
+  String? _currentCursor;
 
-  String? _cursor;
-
-  String? calculateCursor(bool reset) {
-    if (reset) _itemList.clear();
-
-    return reset ? null : _cursor;
+  @override
+  String? getNextParameter(int? limit, bool reset) {
+    if (reset) {
+      _itemList.clear();
+      _currentCursor = null;
+    }
+    return _currentCursor;
   }
 
-  List<T> getPaginatedItems({
-    required List<T> newItems,
-    required String? newCursor,
-  }) {
-    _cursor = newCursor;
-
-    return (_itemList..addAll(newItems)).toList();
+  @override
+  List<T> updateAndGetItems(List<T> items, String? nextCursor) {
+    _currentCursor = nextCursor;
+    _itemList.addAll(items);
+    return List.unmodifiable(_itemList);
   }
 }
