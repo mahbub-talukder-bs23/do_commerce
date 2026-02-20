@@ -29,6 +29,8 @@ abstract class RestClient {
     int limit = 10,
     int page = 1,
     String? cursor,
-    int skip = 0,
+    int offset = 0,
+    String? search,
+    String? category,
   });
 }

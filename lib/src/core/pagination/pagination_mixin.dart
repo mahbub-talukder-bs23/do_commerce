@@ -1,58 +1,115 @@
-abstract class PaginationStrategy<T, P> {
-  P getNextParameter(int? limit, bool reset);
-  List<T> updateAndGetItems(List<T> items, String? nextCursor);
+import 'dart:ui';
+
+abstract class PaginationStrategy<T> {
+  void resetList(List<T> itemList);
+  bool hasMore({
+    required bool reset,
+    required int total,
+    required int currentLength,
+  });
+  List<T> getUpdatedItems({
+    required bool reset,
+    required List<T> newItems,
+    required List<T> itemList,
+    required VoidCallback updateNextParam,
+  });
 }
 
-class OffsetPaginationStrategy<T> implements PaginationStrategy<T, int> {
-  final List<T> _itemList = [];
-
+class OffsetPaginationStrategy<T> implements PaginationStrategy<T> {
   @override
-  int getNextParameter(int? limit, bool reset) {
-    if (reset) _itemList.clear();
-    return _itemList.length;
+  void resetList(List<T> itemList) {
+    itemList.clear();
   }
 
   @override
-  List<T> updateAndGetItems(List<T> items, String? nextCursor) {
-    _itemList.addAll(items);
-    return List.unmodifiable(_itemList);
-  }
-}
-
-class PagePaginationStrategy<T> implements PaginationStrategy<T, int> {
-  final List<T> _itemList = [];
-
-  @override
-  int getNextParameter(int? limit, bool reset) {
-    if (reset) _itemList.clear();
-
-    return (_itemList.length ~/ limit!) + 1;
+  bool hasMore({
+    required bool reset,
+    required int total,
+    required int currentLength,
+  }) {
+    return reset ? true : (currentLength < total);
   }
 
   @override
-  List<T> updateAndGetItems(List<T> items, String? nextCursor) {
-    _itemList.addAll(items);
-    return List.unmodifiable(_itemList);
-  }
-}
-
-class CursorPaginationStrategy<T> implements PaginationStrategy<T, String?> {
-  final List<T> _itemList = [];
-  String? _currentCursor;
-
-  @override
-  String? getNextParameter(int? limit, bool reset) {
+  List<T> getUpdatedItems({
+    required bool reset,
+    required List<T> newItems,
+    required List<T> itemList,
+    required VoidCallback updateNextParam,
+  }) {
     if (reset) {
-      _itemList.clear();
-      _currentCursor = null;
+      resetList(itemList);
     }
-    return _currentCursor;
+
+    updateNextParam();
+
+    itemList.addAll(newItems);
+    return List.unmodifiable(itemList);
+  }
+}
+
+class PagePaginationStrategy<T> implements PaginationStrategy<T> {
+  @override
+  void resetList(List<T> itemList) {
+    itemList.clear();
   }
 
   @override
-  List<T> updateAndGetItems(List<T> items, String? nextCursor) {
-    _currentCursor = nextCursor;
-    _itemList.addAll(items);
-    return List.unmodifiable(_itemList);
+  bool hasMore({
+    required bool reset,
+    required int total,
+    required int currentLength,
+  }) {
+    return reset ? true : (currentLength < total);
+  }
+
+  @override
+  List<T> getUpdatedItems({
+    required bool reset,
+    required List<T> newItems,
+    required List<T> itemList,
+    required VoidCallback updateNextParam,
+  }) {
+    if (reset) {
+      resetList(itemList);
+    }
+
+    updateNextParam();
+
+    itemList.addAll(newItems);
+    return List.unmodifiable(itemList);
+  }
+}
+
+class CursorPaginationStrategy<T> implements PaginationStrategy<T> {
+  @override
+  void resetList(List<T> itemList) {
+    itemList.clear();
+  }
+
+  @override
+  bool hasMore({
+    required bool reset,
+    required int total,
+    required int currentLength,
+  }) {
+    return reset ? true : (currentLength < total);
+  }
+
+  @override
+  List<T> getUpdatedItems({
+    required bool reset,
+    required List<T> newItems,
+    required List<T> itemList,
+    required VoidCallback updateNextParam,
+  }) {
+    if (reset) {
+      resetList(itemList);
+    }
+
+    updateNextParam();
+
+    itemList.addAll(newItems);
+    return List.unmodifiable(itemList);
   }
 }

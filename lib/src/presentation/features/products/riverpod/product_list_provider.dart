@@ -6,9 +6,14 @@ part 'product_list_provider.g.dart';
 
 @riverpod
 class ProductList extends _$ProductList {
+  String? _search;
+  String? _category;
+
   @override
   FutureOr<List<ProductEntity>> build() async {
-    return ref.read(productListUseCaseProvider).call(reset: true);
+    return ref
+        .read(productListUseCaseProvider)
+        .call(reset: true, search: _search, category: _category);
   }
 
   Future<void> loadMoreProduct({bool reset = false}) async {
@@ -16,13 +21,29 @@ class ProductList extends _$ProductList {
 
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      return await ref.read(productListUseCaseProvider).call(reset: reset);
+      return await ref
+          .read(productListUseCaseProvider)
+          .call(reset: reset, search: _search, category: _category);
     });
   }
 
-  // Future<void> reset() async {
-  //   state = await AsyncValue.guard(() async {
-  //     return await ref.read(productListUseCaseProvider).call(reset: true);
-  //   });
-  // }
+  Future<void> updateSearch(String? search) async {
+    _search = search;
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      return await ref
+          .read(productListUseCaseProvider)
+          .call(reset: true, search: _search, category: _category);
+    });
+  }
+
+  Future<void> updateCategory(String? category) async {
+    _category = category;
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      return await ref
+          .read(productListUseCaseProvider)
+          .call(reset: true, search: _search, category: _category);
+    });
+  }
 }

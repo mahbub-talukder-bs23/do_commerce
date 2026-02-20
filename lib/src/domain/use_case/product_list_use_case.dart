@@ -1,3 +1,4 @@
+import 'package:do_commerce/src/domain/entity/pagination_request_entity.dart';
 import 'package:do_commerce/src/domain/repository/product_list_repository.dart';
 
 import '../entity/product_entity.dart';
@@ -7,22 +8,19 @@ class ProductListUseCase {
 
   ProductListUseCase({required this.productListRepository});
 
-  Future<List<ProductEntity>> call({required bool reset}) async {
+  Future<List<ProductEntity>> call({
+    required bool reset,
+    String? search,
+    String? category,
+  }) async {
     try {
-      // if (reset) {
-      //   productListRepository.clearProductList();
-      // }
-      final limit = 10;
+      final requestEntity = PaginationRequestEntity(
+        search: search,
+        category: category,
+        reset: reset,
+      );
 
-      // final currentProducts = productListRepository.productList;
-      // final nextPoint = reset ? 0 : currentProducts.length;
-
-      // final currentProducts = productListRepository.productList;
-      // final nextPoint = reset ? 1 : (currentProducts.length ~/ limit) + 1;
-
-      // final nextPoint = reset ? null : productListRepository.cursor;
-
-      return productListRepository.getProductList(limit: limit, reset: reset);
+      return productListRepository.getProductList(requestEntity: requestEntity);
     } catch (e) {
       rethrow;
     }

@@ -4,7 +4,21 @@ class ProductListEntity {
   /// Only for cursor based pagination
   final String? cursor;
 
-  ProductListEntity({required this.products, this.cursor});
+  /// Only for page based pagination
+  final int? page;
+
+  /// Only for offset based pagination
+  final int? offset;
+
+  final int total;
+
+  ProductListEntity({
+    required this.products,
+    this.cursor,
+    this.page,
+    this.offset,
+    required this.total,
+  });
 }
 
 class ProductEntity {

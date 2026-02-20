@@ -146,20 +146,28 @@ class RestClientImpl implements RestClient {
     int limit = 10,
     int page = 1,
     String? cursor,
-    int skip = 0,
+    int offset = 0,
+    String? search,
+    String? category,
   }) async {
     final data = await switch (type) {
       PaginationType.page => PaginatedDataSource.getDataOnPageLimit(
         limit: limit,
         page: page,
+        search: search,
+        category: category,
       ),
-      PaginationType.skip => PaginatedDataSource.getDataOnSkipLimit(
+      PaginationType.offset => PaginatedDataSource.getDataOnOffsetLimit(
         limit: limit,
-        skip: skip,
+        offset: offset,
+        search: search,
+        category: category,
       ),
       PaginationType.cursor => PaginatedDataSource.getDataOnCursorLimit(
         limit: limit,
         cursor: cursor,
+        search: search,
+        category: category,
       ),
     };
 
