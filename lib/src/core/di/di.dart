@@ -6,7 +6,7 @@ import 'package:do_commerce/src/domain/repository/product_list_repository.dart';
 import 'package:do_commerce/src/domain/use_case/product_details_use_case.dart';
 import 'package:do_commerce/src/domain/use_case/product_list_use_case.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:do_commerce/src/core/pagination/pagination_mixin.dart';
+import 'package:do_commerce/src/core/pagination/pagination_strategies.dart';
 import '../../data/repository/auth_repository_impl.dart';
 import '../../data/services/network/rest_client/rest_client.dart';
 import '../../data/services/network/rest_client/rest_client_impl.dart';
