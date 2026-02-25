@@ -7,9 +7,10 @@ import '../../domain/repository/auth_repository.dart';
 import '../services/network/rest_client/rest_client.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-  AuthRepositoryImpl({required this.restClient});
+  AuthRepositoryImpl({required this.restClient, required this.secureStorage});
 
   final RestClient restClient;
+  final SecureStorage secureStorage;
 
   @override
   Future<String> login(LoginEntity loginEntity) async {
@@ -24,12 +25,12 @@ class AuthRepositoryImpl implements AuthRepository {
 
       final loginResponseModel = LoginResponseModel.fromJson(response.data);
 
-      await SecureStorage().write(
+      await secureStorage.write(
         key: StringConstants.accessTokenKey,
         value: loginResponseModel.accessToken,
       );
 
-      await SecureStorage().write(
+      await secureStorage.write(
         key: StringConstants.refreshTokenKey,
         value: loginResponseModel.refreshToken,
       );

@@ -10,6 +10,7 @@ import 'package:do_commerce/src/core/pagination/pagination_strategies.dart';
 import '../../data/repository/auth_repository_impl.dart';
 import '../../data/services/network/rest_client/rest_client.dart';
 import '../../data/services/network/rest_client/rest_client_impl.dart';
+import '../../data/services/local/secure_storage.dart';
 import '../../domain/repository/auth_repository.dart';
 import '../../domain/use_case/auth_use_case.dart';
 
@@ -38,7 +39,10 @@ ProductDetailsUseCase productDetailsUseCase(Ref ref) {
 //repository
 @Riverpod(keepAlive: true)
 AuthRepository authRepository(Ref ref) {
-  return AuthRepositoryImpl(restClient: ref.read(restClientProvider));
+  return AuthRepositoryImpl(
+    restClient: ref.read(restClientProvider),
+    secureStorage: ref.read(secureStorageProvider),
+  );
 }
 
 @Riverpod(keepAlive: true)
@@ -58,4 +62,9 @@ ProductDetailsRepository productDetailsRepository(Ref ref) {
 @riverpod
 RestClient restClient(Ref ref) {
   return RestClientImpl();
+}
+
+@Riverpod(keepAlive: true)
+SecureStorage secureStorage(Ref ref) {
+  return SecureStorage();
 }
