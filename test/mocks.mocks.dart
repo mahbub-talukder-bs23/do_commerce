@@ -260,30 +260,24 @@ class MockPaginationStrategy<T> extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#limit), returnValue: 0) as int);
 
   @override
-  List<T> getUpdatedItems({
+  dynamic getNextParam(bool? reset) =>
+      super.noSuchMethod(Invocation.method(#getNextParam, [reset]));
+
+  @override
+  List<T> onPageLoaded({
     required bool? reset,
-    required List<T>? newItems,
+    required _i10.PageResult<T>? page,
     required List<T>? itemList,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#getUpdatedItems, [], {
+            Invocation.method(#onPageLoaded, [], {
               #reset: reset,
-              #newItems: newItems,
+              #page: page,
               #itemList: itemList,
             }),
             returnValue: <T>[],
           )
           as List<T>);
-
-  @override
-  dynamic getNextParam(bool? reset) =>
-      super.noSuchMethod(Invocation.method(#getNextParam, [reset]));
-
-  @override
-  void updateNextParam({dynamic nextParam}) => super.noSuchMethod(
-    Invocation.method(#updateNextParam, [], {#nextParam: nextParam}),
-    returnValueForMissingStub: null,
-  );
 }
 
 /// A class which mocks [AuthRepository].

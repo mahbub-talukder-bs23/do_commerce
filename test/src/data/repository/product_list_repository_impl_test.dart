@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:dio/dio.dart';
+import 'package:do_commerce/src/core/pagination/pagination_strategies.dart';
 import 'package:do_commerce/src/data/repository/product_list_repository_impl.dart';
 import 'package:do_commerce/src/domain/entity/pagination_request_entity.dart';
 import 'package:do_commerce/src/domain/entity/product_entity.dart';
@@ -63,9 +64,9 @@ void main() {
       ).thenAnswer((_) async => response);
 
       when(
-        mockPaginationStrategy.getUpdatedItems(
+        mockPaginationStrategy.onPageLoaded(
           reset: anyNamed('reset'),
-          newItems: anyNamed('newItems'),
+          page: anyNamed('page'),
           itemList: anyNamed('itemList'),
         ),
       ).thenReturn([]);
@@ -84,7 +85,16 @@ void main() {
         ),
       ).called(1);
 
-      verify(mockPaginationStrategy.updateNextParam(nextParam: 1)).called(1);
+      final captured = verify(
+        mockPaginationStrategy.onPageLoaded(
+          reset: false,
+          page: captureAnyNamed('page'),
+          itemList: anyNamed('itemList'),
+        ),
+      ).captured.single as PageResult<ProductEntity>;
+      expect(captured.meta.page, 1);
+      expect(captured.meta.offset, 0);
+      expect(captured.items.single.id, 1);
     });
 
     test(
@@ -141,9 +151,9 @@ void main() {
         ).thenAnswer((_) async => response);
 
         when(
-          mockPaginationStrategy.getUpdatedItems(
+          mockPaginationStrategy.onPageLoaded(
             reset: anyNamed('reset'),
-            newItems: anyNamed('newItems'),
+            page: anyNamed('page'),
             itemList: anyNamed('itemList'),
           ),
         ).thenReturn([]);

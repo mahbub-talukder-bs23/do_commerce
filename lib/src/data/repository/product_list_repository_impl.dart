@@ -35,11 +35,16 @@ class ProductListRepositoryImpl extends ProductListRepository {
 
       final model = ProductListModel.fromJson(response.data);
 
-      paginationStrategy.updateNextParam(nextParam: model.page);
-
-      return paginationStrategy.getUpdatedItems(
+      return paginationStrategy.onPageLoaded(
         reset: requestEntity.reset,
-        newItems: model.products,
+        page: PageResult(
+          items: model.products,
+          meta: PaginationMeta(
+            page: model.page,
+            offset: model.offset,
+            nextCursor: model.cursor,
+          ),
+        ),
         itemList: _itemList,
       );
     } catch (e, stackTrace) {
