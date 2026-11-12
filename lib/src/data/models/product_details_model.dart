@@ -16,7 +16,7 @@ class ProductDetailsModel extends ProductDetailsEntity
     required super.rating,
     required super.discountPercentage,
     required super.tags,
-    required super.brand,
+    super.brand = '',
     required super.warrantyInformation,
     required super.availabilityStatus,
     required super.returnPolicy,

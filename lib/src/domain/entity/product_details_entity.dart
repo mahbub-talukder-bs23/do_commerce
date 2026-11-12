@@ -20,7 +20,7 @@ class ProductDetailsEntity extends ProductEntity {
     required super.rating,
     required super.discountPercentage,
     required this.tags,
-    required this.brand,
+    this.brand = '',
     required this.warrantyInformation,
     required this.availabilityStatus,
     required this.returnPolicy,
