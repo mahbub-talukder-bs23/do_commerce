@@ -20,7 +20,7 @@ class ProductListUseCase {
         reset: reset,
       );
 
-      return productListRepository.getProductList(requestEntity: requestEntity);
+      return await productListRepository.getProductList(requestEntity: requestEntity);
     } catch (e) {
       rethrow;
     }
